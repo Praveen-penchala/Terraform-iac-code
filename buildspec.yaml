@@ -9,7 +9,7 @@ phases:
       - yum update -y
 
       - echo "Installing required tools"
-      - yum install -y git tree unzip curl wget
+      - yum install -y git tree unzip curl wget --skip-broken
 
       - echo "Installing AWS CLI v2"
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
