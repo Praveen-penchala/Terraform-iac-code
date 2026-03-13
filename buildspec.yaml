@@ -8,29 +8,38 @@ phases:
       - echo "Updating system packages"
       - yum update -y
 
-      - echo "Installing basic tools"
+      - echo "Installing required tools"
       - yum install -y git tree unzip curl wget
 
       - echo "Installing AWS CLI v2"
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - unzip awscliv2.zip
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+      - unzip -q awscliv2.zip
       - ./aws/install
+      - aws --version
 
       - echo "Installing Terraform"
       - wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
       - unzip terraform_1.6.6_linux_amd64.zip
       - mv terraform /usr/local/bin/
+      - terraform version
+
+  pre_build:
+    commands:
+      - echo "Checking directory structure"
+      - pwd
+      - ls -ltr
 
   build:
     commands:
-      - echo "Changing to Terraform directory"
-      - cd Terraform-iac-code
-
-      - echo "Terraform init"
+      - echo "Initializing Terraform"
       - terraform init
 
-      - echo "Terraform plan"
+      - echo "Running Terraform plan"
       - terraform plan
 
-      - echo "Terraform apply"
+      - echo "Applying Terraform"
       - terraform apply -auto-approve
+
+artifacts:
+  files:
+    - '**/*'
