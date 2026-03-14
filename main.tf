@@ -9,3 +9,7 @@ resource "aws_instance" "aws" {
     Name = "EC2_terraform"
   }
 }
+
+resource "aws_s3_bucket" "sample_bucket" {
+  bucket = "tf-iac-bucket-2027"
+}
