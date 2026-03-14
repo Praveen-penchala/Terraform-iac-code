@@ -11,5 +11,5 @@ resource "aws_instance" "aws" {
 }
 
 resource "aws_s3_bucket" "sample_bucket" {
-  bucket = "tf-iac-bucket-2027"
+  bucket = "tf-iac-bucket-2028"
 }
