@@ -7,10 +7,10 @@ pipeline {
             steps {
                 sh '''
                 echo "Updating system packages"
-                sudo yum update -y
+                sudo apt update -y
 
                 echo "Installing required tools"
-                sudo yum install -y git tree unzip curl wget --skip-broken
+                sudo apt install -y git tree unzip curl wget
 
                 echo "Installing AWS CLI v2"
                 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
@@ -30,7 +30,6 @@ pipeline {
         stage('Pre-Build') {
             steps {
                 sh '''
-                echo "Checking directory structure"
                 pwd
                 ls -ltr
                 '''
@@ -39,36 +38,20 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh '''
-                terraform init
-                '''
+                sh 'terraform init'
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh '''
-                terraform plan
-                '''
+                sh 'terraform plan'
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh '''
-                terraform apply -auto-approve
-                '''
+                sh 'terraform apply -auto-approve'
             }
-        }
-
-    }
-
-    post {
-        success {
-            echo "Pipeline completed successfully"
-        }
-        failure {
-            echo "Pipeline failed"
         }
     }
 }
