@@ -13,15 +13,17 @@ pipeline {
                 sudo apt install -y git tree unzip curl wget
 
                 echo "Installing AWS CLI v2"
+                rm -rf aws awscliv2.zip
                 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
-                unzip -q awscliv2.zip
+                unzip -oq awscliv2.zip
                 sudo ./aws/install --update
                 aws --version
 
                 echo "Installing Terraform"
+                rm -f terraform terraform_1.6.6_linux_amd64.zip
                 wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
-                unzip terraform_1.6.6_linux_amd64.zip
-                sudo mv terraform /usr/local/bin/
+                unzip -oq terraform_1.6.6_linux_amd64.zip
+                sudo mv -f terraform /usr/local/bin/
                 terraform version
                 '''
             }
@@ -30,6 +32,7 @@ pipeline {
         stage('Pre-Build') {
             steps {
                 sh '''
+                echo "Checking workspace"
                 pwd
                 ls -ltr
                 '''
@@ -38,19 +41,25 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                sh '''
+                terraform init
+                '''
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh 'terraform plan'
+                sh '''
+                terraform plan
+                '''
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve'
+                sh '''
+                terraform apply -auto-approve
+                '''
             }
         }
     }
